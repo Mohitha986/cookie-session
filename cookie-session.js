@@ -1,0 +1,25 @@
+//create a session of 1 minute with the client request using the cookie-session and display the count of client//
+
+var express = require('express');
+var app = express();
+var cookieSession = require('cookie-session');
+
+app.use(cookieSession({
+    name : 'session',
+    keys :['key1', 'key2']
+}))
+
+app.use(function(req, res, next) {
+    req.sessionOptions.maxAge = 10000
+    next()
+})
+app.get('/', function(req, res, next) {
+    if(req.session.views) {
+        req.session.views++;
+        res.send("No. of views:" + req.session.views);
+    } else{
+        req.session.views = 1;
+        res.send("No. of visits:" + req.session.views);
+    }
+})
+app.listen(3000);
